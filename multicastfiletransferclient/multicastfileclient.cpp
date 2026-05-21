@@ -148,7 +148,7 @@ void MulticastClient::processDatagram(const QByteArray &datagram, const QHostAdd
 
 
         sendAllFilesState=true;
-        QTimer::singleShot(200, this, [tid,this]()
+        QTimer::singleShot(1000, this, [tid,this]()
         {
             qDebug()<<"DOSYA İLE İLGİLİ İŞLEMLER YAPILACAK.....";
             sendAllFilesState=false;
@@ -518,15 +518,16 @@ QString  MulticastClient::getDesktopPathFromHome(const QString &home)
     // fallback
     return home + "/Desktop";
 }
-bool MulticastClient::copyFile(const QString& src, const QString& dstDir, bool overwrite)
+bool MulticastClient::copyFile(const QString& src, const QString& dst, bool overwrite)
 {
-    QFileInfo info(src);
-    QString dst = dstDir + "/" + info.fileName();
+    ///qDebug()<<"copyFile"<<src<<dst;
+    //QFileInfo info(src);
+    //QString dst = dstDir + "/" + info.fileName();
 
-    if(dstDir!="/tmp"){
+   /* if(dstDir!="/tmp"){
     if(overwrite && QFile::exists(dst))
         QFile::remove(dst);
-    }
+    }*/
     return QFile::copy(src, dst);
 }
 bool MulticastClient::copyDirectory(const QString &sourceDir,
@@ -664,7 +665,8 @@ void MulticastClient::copyPath(const QString& basePath,const QString& sourceType
 
         QDir().mkpath(fi.path());
 
-        copyFile(sourcePath, fi.path(), owrite);
+        copyFile(sourcePath, finalTargetPath, owrite);
+
     }
     setPermissionsRecursive(finalTargetPath, userInfo.uid, userInfo.gid);
 
