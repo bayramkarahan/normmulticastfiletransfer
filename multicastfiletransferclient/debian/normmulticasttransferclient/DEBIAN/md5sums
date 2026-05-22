@@ -1,8 +1,0 @@
-ed2428414b0720548aabcbd74d1abf1e  lib/systemd/system/multicastdebinstaller@.service
-5b5b23f35532200252c79247ced8c830  lib/systemd/system/multicastfiletransferclient.service
-3899242e6e0d2aae56def16f18651340  lib/systemd/system/multicastscriptexec@.service
-54f5e03c3b67d1e6653586f4bcf83572  usr/bin/multicastfiletransferclient
-287c0529f65384469caa07e85969717c  usr/share/doc/normmulticasttransferclient/changelog.gz
-ae9b3cc14747512e99ecf66a25ed1a36  usr/share/doc/normmulticasttransferclient/copyright
-96ac84c585f5082c4e92b29638ff3914  usr/share/multicastfiletransferclient/debmulticastscript
-842c1049b09d4b3a299af9c1a29e4e20  usr/share/multicastfiletransferclient/scriptmulticastscript

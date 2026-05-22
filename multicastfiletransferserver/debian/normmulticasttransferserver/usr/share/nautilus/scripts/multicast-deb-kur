@@ -1,2 +1,0 @@
-#!/bin/bash
-/usr/bin/multicastfiletransferserver --mode rightclick --target deb "$@"
