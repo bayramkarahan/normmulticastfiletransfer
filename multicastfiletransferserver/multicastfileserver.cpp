@@ -155,8 +155,6 @@ void MulticastServer::startNextJob()
                        this,
                        [this]()
     {
-        qDebug() << "İşe başladı"
-                 << currentJob.absolutePath;
 
         if(sender)
         {
@@ -200,75 +198,17 @@ void MulticastServer::sendMeta()
     s << sourceBaseName;
     s << sourceType;
 
-
     socket.writeDatagram(msg, QHostAddress(MULTICAST_IP), PORT);
     if(!allowedClients.isEmpty())
     {
         allClients = QSet<QString>(allowedClients.begin(), allowedClients.end());
     }
     log("META: " + currentJob.relativePath);
-    log(QString("File size %1").arg((quint32)currentJob.data.size()));
-    log(QString("Total packets %1").arg((quint32)currentJob.totalPackets));
-}
-
-void MulticastServer::sendPacket(int index)
-{
-    QByteArray chunk = currentJob.data.mid(index*PACKET_SIZE, PACKET_SIZE);
-
-    PacketHeader h{DATA, transferId,
-                   (quint32)index,
-                   (quint32)currentJob.totalPackets,
-                   (quint32)chunk.size()};
-
-    QByteArray p;
-    p.append((char*)&h,sizeof(h));
-    p.append(chunk);
-
-    socket.writeDatagram(p,QHostAddress(MULTICAST_IP),PORT);
-    //const char* base = currentJob.data.constData();
-
-        /*int offset = index * PACKET_SIZE;
-
-        int size = qMin(
-            PACKET_SIZE,
-            currentJob.data.size() - offset);
-
-        PacketHeader h{
-            DATA,
-            transferId,
-            (quint32)index,
-            (quint32)currentJob.totalPackets,
-            (quint32)size
-        };
-
-        //QByteArray p;
-        //p.resize(sizeof(PacketHeader) + size);
-
-        memcpy(sendBuffer.data(), &h, sizeof(h));
-
-        memcpy(sendBuffer.data() + sizeof(h),
-               dataPtr + offset,
-               size);
-
-        socket.writeDatagram(
-            sendBuffer.constData(),
-            sizeof(PacketHeader) + size,
-            QHostAddress(MULTICAST_IP),
-            PORT);*/
-}
-
-void MulticastServer::sendEnd()
-{
-    PacketHeader h{END, transferId, 0,
-                   (quint32)currentJob.totalPackets, 0};
-
-    QByteArray p;
-    p.append((char*)&h,sizeof(h));
-
-    socket.writeDatagram(p,QHostAddress(MULTICAST_IP),PORT);
-
 
 }
+
+
+
 void MulticastServer::allFilesSendDone()
 {
     log("ALLFILESSENTDONE Gönderildi");
@@ -284,8 +224,6 @@ void MulticastServer::allFilesSendDone()
 
 void MulticastServer::processPendingDatagrams()
 {
-    QSet<quint32> missingAll;
-
     while(nackSocket.hasPendingDatagrams())
     {
         QByteArray d;
@@ -298,21 +236,7 @@ void MulticastServer::processPendingDatagrams()
         quint32 type;
         s >> type;
 
-        if(type == NACK)
-        {
-            QVector<quint32> missing;
-            s >> missing;
-
-            QString ip = sender.toString();
-            allClients.insert(ip);
-
-            log(QString("NACK from %1 missing=%2")
-                .arg(ip)
-                .arg(missing.size()));
-
-            missingAll.unite(QSet<quint32>(missing.begin(), missing.end()));
-        }
-        else if(type == DONE)
+        if(type == DONE)
         {
             quint64 tid;
             s >> tid;
@@ -341,8 +265,8 @@ void MulticastServer::processPendingDatagrams()
                         currentJob.relativePath,
                         QString::number(transferId)
                     );
-                    qDebug()<<"DOSYA TAMAMLANDI. YENİ DOSYAYA GEÇİLİYOR..";
-                    doneTimer->start(startNextJobTimeout);
+                    ///qDebug()<<"DOSYA TAMAMLANDI. YENİ DOSYAYA GEÇİLİYOR..";
+                    /// doneTimer->start(startNextJobTimeout);
                 }
 
             }
@@ -417,54 +341,12 @@ void MulticastServer::processPendingDatagrams()
                 emit clientScriptInstallDone(ip, status);
             }
         }
-        else if(type == HELLO_REPLY)
-        {
-            qint64 sentTime;
-            s >> sentTime;
-            QString ip = sender.toString();
-            qint64 now = QDateTime::currentMSecsSinceEpoch();
-            qint64 rtt = now - sentTime;
-            helloClientRttMap[ip] = rtt;
-            //qDebug() << "RTT:" << ip << rtt << "ms";
-        }
+
     }
 
-    if(!missingAll.isEmpty())
-    {
-        log(QString("Resend %1 packets").arg(missingAll.size()));
-        for(auto idx: missingAll)
-        {
-            sendPacket(idx);
-            QThread::usleep(100);
-            //QThread::msleep(2);
-        }
-        sendEnd();
-    }
+
 }
 
-void MulticastServer::sendHello()
-{
-    QByteArray datagram;
-
-    QDataStream s(&datagram, QIODevice::WriteOnly);
-    qint64 now = QDateTime::currentMSecsSinceEpoch();
-    s << (quint32)HELLO;
-    s << (quint64)now;
-    socket.writeDatagram(
-        datagram,
-        QHostAddress(MULTICAST_IP),PORT);
-
-    log("HELLO Gönderildi");
-
-
-    QTimer::singleShot(500, this, [this]()
-    {
-
-        log("HELLO_REPLY Geldi.");
-        //calculateRttValues();
-        startNextJob();
-    });
-}
 
 void MulticastServer::calculateNextJobTimeout()
 {
@@ -484,7 +366,7 @@ void MulticastServer::calculateNextJobTimeout()
     }
     else if(networkType == "ethernet")
     {
-        startNextJobTimeout = 100;
+        startNextJobTimeout = 1000;
     }
     else
     {

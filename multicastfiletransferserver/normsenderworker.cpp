@@ -83,7 +83,7 @@ void NormSenderWorker::send(QString filePath,
                         sessionId,
                         32*1024*1024,
                         1400,
-                        128,
+                        256,
                         8);
     }
 
@@ -92,13 +92,13 @@ void NormSenderWorker::send(QString filePath,
      * ========================= */
     else if(interfaceType == "ethernet")
     {
-        currentRate = 400.0e+06;
+        currentRate = 60.0e+06;
 
         NormSetTxRate(session,
                       currentRate);
 
         NormSetTxSocketBuffer(session,
-                              32*1024*1024);
+                              16*1024*1024);
 
         NormSetBackoffFactor(session,
                              0.0);
@@ -107,14 +107,14 @@ void NormSenderWorker::send(QString filePath,
                          1);
 
         NormSetGrttEstimate(session,
-                            0.002);
+                            0.010);
 
         NormStartSender(session,
                         sessionId,
-                        64*1024*1024,
-                        1460,
+                       32*1024*1024,
+                        1400,
                         256,
-                        4);
+                        8);
     }
 
     /*
@@ -175,9 +175,10 @@ void NormSenderWorker::send(QString filePath,
             break;
         }
 
+
         /*
-         * Her 1 saniyede bir adaptif rate güncelle
-         */
+         * Her 5 saniyede bir adaptif rate güncelle
+         *//*
         if(rateTimer.elapsed() >= 5000)
         {
             rateTimer.restart();
@@ -230,7 +231,7 @@ void NormSenderWorker::send(QString filePath,
                 << "Rate:"
                 << currentRate/1e6
                 << "Mbps";
-        }
+        }*/
     }
 
     NormStopSender(session);

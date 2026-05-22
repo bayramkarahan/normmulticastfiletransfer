@@ -54,10 +54,10 @@ void NormReceiverWorker::startReceiver(QString cacheDir,
     else if(interfaceType == "ethernet")
     {
         NormSetRxSocketBuffer(session,
-                              32*1024*1024);
+                              16*1024*1024);
 
         NormStartReceiver(session,
-                          64*1024*1024);
+                          32*1024*1024);
     }
 
 

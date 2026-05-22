@@ -1,0 +1,12 @@
+Package: normmulticasttransferserver-dbgsym
+Source: normmulticasttransferserver
+Version: 1.0.0
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Bayram KARAHAN <bayramk@gmail.com>
+Installed-Size: 51
+Depends: normmulticasttransferserver (= 1.0.0)
+Section: debug
+Priority: optional
+Description: debug symbols for normmulticasttransferserver
+Build-Ids: b64de199261a8ebbbbad53b1a6771088e369e177

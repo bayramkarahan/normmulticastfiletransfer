@@ -99,19 +99,12 @@ private slots:
     QString detectNetworkType();
 private:
     void log(const QString &msg);
-    void sendPacket(int index);
     void sendMeta();
-    void sendEnd();
     void allFilesSendDone();
-    void sendHello();
     void startNextJob();
     void scanPath(const QString &path);
-
     QUdpSocket socket;
     QUdpSocket nackSocket;
-
-
-
 
     int currentIndex = 0;
     quint64 transferId;
