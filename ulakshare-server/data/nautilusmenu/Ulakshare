@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/ulakshare-server --mode rightclick --target deb "$@"

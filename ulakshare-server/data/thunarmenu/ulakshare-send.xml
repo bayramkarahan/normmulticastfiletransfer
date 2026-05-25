@@ -1,0 +1,10 @@
+<action>
+    <icon>network-transmit</icon>
+    <name>ulakshare Gonder</name>
+    <unique-id>ulakshare-script</unique-id>
+    <command>/usr/bin/ulakshare-server --mode rightclick --target deb %F</command>
+    <description>ulakshare ile gönder</description>
+    <patterns>*.sh</patterns>
+    <other-files/>
+    <text-files/>
+</action>

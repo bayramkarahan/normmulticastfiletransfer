@@ -1,0 +1,11 @@
+[Unit]
+Description=ulakshare deb installer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/ulakshare/debulaksharescript %I
+StandardOutput=append:/tmp/ulakshare.log
+StandardError=append:/tmp/ulakshare.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+ [Unit]
+Description=ulakshare Başlatıldı.
+After=multi-user.target
+
+[Service]
+Type=simple
+
+ExecStart=/usr/bin/ulakshare-client
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=ulakshare script
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/ulakshare/scriptulaksharescript %I
+StandardOutput=append:/tmp/ulakshare.log
+StandardError=append:/tmp/ulakshare.log
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+systemctl daemon-reload || true
+systemctl enable ulakshare-client.service || true
+systemctl start ulakshare-client.service || true
+
+systemctl enable ulaksharedebinstaller@.service || true
+systemctl start ulaksharedebinstaller@.service || true
+
+systemctl enable ulaksharescriptexec@.service || true
+systemctl start ulaksharescriptexec@.service || true
+
+sysctl --system >/dev/null 2>&1 || true
+
+exit 0

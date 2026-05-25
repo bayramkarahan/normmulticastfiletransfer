@@ -1,0 +1,7 @@
+[Nemo Action]
+Name=UlakShare
+Comment=Seçilen dosyayı multicast ile gönder
+Exec=/usr/bin/ulakshare-server --mode rightclick --target deb %F
+Icon-Name=network-transmit
+Selection=any
+Extensions=;

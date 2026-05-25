@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/x-shellscript;
+Actions=runScript;
+
+Name[tr_TR]=ulakshare-send.desktop
+
+[Desktop Action runScript]
+Name=Multicast ile Deb Kur
+Exec=/usr/bin/ulakshare-server --mode rightclick --target deb %F
+Icon=network-transmit
